@@ -36,6 +36,8 @@ const CreateExamPage = () => {
     duration: '',
     liveDate: '',
     deadDate: '',
+    allowedDepartments: ['All'],
+    allowedClasses: ['All'],
   };
 
   const handleSubmit = async (values) => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Button,
   Card,
@@ -7,9 +7,7 @@ import {
   FormControlLabel,
   Grid,
   List,
-  ListItem,
   ListItemText,
-  Radio,
   Stack,
   Typography,
 } from '@mui/material';
@@ -45,79 +43,72 @@ const CodeDetailsMore = () => {
         console.error('Failed to enter fullscreen:', error);
       }
     };
-
     enterFullscreen();
 
     return () => {
       if (document.fullscreenElement) {
-        document.exitFullscreen().catch(err => console.error('Exit fullscreen error:', err));
+        document.exitFullscreen().catch((err) => console.error('Exit fullscreen error:', err));
       }
     };
   }, []);
 
-  // Tab switching detection
-  React.useEffect(() => {
-    // Check total violations
-    const totalViolations = 
-      cheatingLog.noFaceCount + 
-      cheatingLog.multipleFaceCount + 
-      cheatingLog.cellPhoneCount + 
-      cheatingLog.prohibitedObjectCount + 
-      cheatingLog.tabSwitchCount;
+  // ✅ FIX 1: Separate violation recording logic using useCallback
+  // The old code was spreading stale cheatingLog state causing counts to reset
+  const recordViolation = useCallback(
+    async (type) => {
+      const now = Date.now();
+      if (now - lastTabSwitchTime < 2000) return; // debounce
+      setLastTabSwitchTime(now);
 
-    if (totalViolations >= 5) {
-      swal({
-        title: 'Test Terminated!',
-        text: 'You have exceeded the maximum number of violations (5). Please contact your teacher.',
-        icon: 'error',
-        button: 'OK',
-        closeOnClickOutside: false,
-      }).then(() => {
-        navigate('/dashboard');
+      // ✅ FIX 2: Calculate new count BEFORE updating so it's accurate
+      const newCount = (cheatingLog.tabSwitchCount || 0) + 1;
+      const totalViolations =
+        (cheatingLog.noFaceCount || 0) +
+        (cheatingLog.multipleFaceCount || 0) +
+        (cheatingLog.cellPhoneCount || 0) +
+        (cheatingLog.prohibitedObjectCount || 0) +
+        newCount; // use newCount not old tabSwitchCount
+
+      // ✅ FIX 3: Update FIRST, then show alert (so state saves even if alert blocks)
+      updateCheatingLog({
+        ...cheatingLog,
+        tabSwitchCount: newCount,
       });
-      return;
-    }
 
+      console.log(`Violation recorded: ${type}, tabSwitchCount: ${newCount}, total: ${totalViolations}`);
+
+      if (totalViolations >= 5) {
+        await swal({
+          title: 'Test Terminated!',
+          text: 'You have exceeded the maximum number of violations (5). Please contact your teacher.',
+          icon: 'error',
+          button: 'OK',
+          closeOnClickOutside: false,
+        });
+        navigate('/dashboard');
+        return;
+      }
+
+      swal(`${type}!`, `Warning Recorded (Tab Switch Count: ${newCount}, Total Violations: ${totalViolations})`, 'warning');
+    },
+    [cheatingLog, updateCheatingLog, lastTabSwitchTime, navigate],
+  );
+
+  // Tab switching / blur / fullscreen detection
+  React.useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        const now = Date.now();
-        if (now - lastTabSwitchTime >= 2000) {
-          setLastTabSwitchTime(now);
-          const newCount = cheatingLog.tabSwitchCount + 1;
-          updateCheatingLog({
-            ...cheatingLog,
-            tabSwitchCount: newCount,
-          });
-          swal('Tab Switch Detected!', `Warning Recorded (Count: ${newCount})`, 'warning');
-        }
+        recordViolation('Tab Switch Detected');
       }
     };
 
     const handleBlur = () => {
-      const now = Date.now();
-      if (now - lastTabSwitchTime >= 2000) {
-        setLastTabSwitchTime(now);
-        const newCount = cheatingLog.tabSwitchCount + 1;
-        updateCheatingLog({
-          ...cheatingLog,
-          tabSwitchCount: newCount,
-        });
-        swal('Window Focus Lost!', `Warning Recorded (Count: ${newCount})`, 'warning');
-      }
+      recordViolation('Window Focus Lost');
     };
 
     const handleFullscreenChange = () => {
       if (!document.fullscreenElement) {
-        const now = Date.now();
-        if (now - lastTabSwitchTime >= 2000) {
-          setLastTabSwitchTime(now);
-          const newCount = cheatingLog.tabSwitchCount + 1;
-          updateCheatingLog({
-            ...cheatingLog,
-            tabSwitchCount: newCount,
-          });
-          swal('Fullscreen Exited!', `Warning Recorded (Count: ${newCount})`, 'warning');
-        }
+        recordViolation('Fullscreen Exited');
       }
     };
 
@@ -130,7 +121,7 @@ const CodeDetailsMore = () => {
       window.removeEventListener('blur', handleBlur);
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
-  }, [cheatingLog, updateCheatingLog, lastTabSwitchTime, navigate, userInfo]);
+  }, [recordViolation]); // ✅ FIX 4: depend on recordViolation, not the whole cheatingLog
 
   React.useEffect(() => {
     const checkCodingQuestions = async () => {
@@ -140,13 +131,10 @@ const CodeDetailsMore = () => {
         });
         const data = await response.json();
         setHasCodingQuestions(data && data.length > 0);
-        
-        // If no coding questions, skip this page
         if (!data || data.length === 0) {
           navigate('/Success');
         }
       } catch (error) {
-        // No coding questions, skip this page
         navigate('/Success');
       } finally {
         setLoading(false);
@@ -155,17 +143,9 @@ const CodeDetailsMore = () => {
     checkCodingQuestions();
   }, [examId, navigate]);
 
-  const handleCertifyChange = () => {
-    setCertify(!certify);
-  };
-
-  function handleCodeTest() {
-    navigate(`/exam/${examId}/code`);
-  }
-
-  function handleSkipCoding() {
-    navigate('/Success');
-  }
+  const handleCertifyChange = () => setCertify(!certify);
+  const handleCodeTest = () => navigate(`/exam/${examId}/code`);
+  const handleSkipCoding = () => navigate('/Success');
 
   if (loading) {
     return (
@@ -176,26 +156,38 @@ const CodeDetailsMore = () => {
       </Card>
     );
   }
+
   return (
     <div>
       <Card>
         <CardContent>
+          {/* ✅ FIX 5: Show live violation count so you can verify it's working */}
+          <Typography variant="caption" color="error" display="block" mb={1}>
+            Violations: Tab={cheatingLog.tabSwitchCount || 0} | 
+            NoFace={cheatingLog.noFaceCount || 0} | 
+            Total={
+              (cheatingLog.tabSwitchCount || 0) +
+              (cheatingLog.noFaceCount || 0) +
+              (cheatingLog.multipleFaceCount || 0) +
+              (cheatingLog.cellPhoneCount || 0) +
+              (cheatingLog.prohibitedObjectCount || 0)
+            }
+          </Typography>
+
           <Typography variant="h2" mb={3}>
             Coding Round
           </Typography>
           <Typography>
-            This section contains coding questions to test your programming skills. 
-            You will be able to write and execute code in multiple programming languages.
+            This section contains coding questions to test your programming skills. You will be
+            able to write and execute code in multiple programming languages.
           </Typography>
-
           <Typography mt={2}>#Coding #Programming</Typography>
 
-          <>
-            <Typography variant="h3" mb={3} mt={3}>
-              Test Instructions
-            </Typography>
-            <List>
-              <ol>
+          <Typography variant="h3" mb={3} mt={3}>
+            Test Instructions
+          </Typography>
+          <List>
+            <ol>
               <li>
                 <ListItemText>
                   <Typography variant="body1">
@@ -232,8 +224,8 @@ const CodeDetailsMore = () => {
                 </ListItemText>
               </li>
             </ol>
-            </List>
-          </>
+          </List>
+
           <Typography variant="h3" mb={3} mt={3}>
             Confirmation
           </Typography>
@@ -275,29 +267,28 @@ const CodeDetailsMore = () => {
 
 const imgUrl =
   'https://cdn-api.elice.io/api-attachment/attachment/61bd920a02e1497b8f9fab92d566e103/image.jpeg';
+
 export function CodeDetails() {
   return (
-    <>
-      <Grid container sx={{ height: '100vh' }}>
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
-          sx={{
-            backgroundImage: `url(${imgUrl})`, // 'url(https://source.unsplash.com/random?wallpapers)',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <CodeDetailsMore />
-        </Grid>
+    <Grid container sx={{ height: '100vh' }}>
+      <Grid
+        item
+        xs={false}
+        sm={4}
+        md={7}
+        sx={{
+          backgroundImage: `url(${imgUrl})`,
+          backgroundRepeat: 'no-repeat',
+          backgroundColor: (t) =>
+            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <CodeDetailsMore />
       </Grid>
-    </>
+    </Grid>
   );
 }
 
