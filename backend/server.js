@@ -80,23 +80,15 @@ app.use("/api/users", examRoutes);
 app.use("/api/users", resultRoutes);
 app.use("/api/coding", codingRoutes);
 
-// we we are deploying this in production
-// make frontend build then
-if (process.env.NODE_ENV === "production") {
-  const __dirname = path.resolve();
-  // we making front build folder static to serve from this app
-  app.use(express.static(path.join(__dirname, "/frontend/dist")));
+// Health check endpoint for all environments
+app.get("/", (req, res) => {
+  res.send("<h1>ProctAI Backend Server is Running ✅</h1>");
+});
 
-  // if we get an routes that are not define by us we show then index html file
-  // every enpoint that is not api/users go to this index file
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"))
-  );
-} else {
-  app.get("/", (req, res) => {
-    res.send("<h1>server is running </h1>");
-  });
-}
+// API health check
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", message: "Backend is healthy" });
+});
 
 // Error handling middleware - must be after all routes
 app.use(notFound);
