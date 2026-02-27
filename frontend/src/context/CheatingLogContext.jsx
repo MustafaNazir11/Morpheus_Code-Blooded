@@ -6,14 +6,11 @@ const CheatingLogContext = createContext();
 export const CheatingLogProvider = ({ children }) => {
   const { userInfo } = useSelector((state) => state.auth);
   const [cheatingLog, setCheatingLog] = useState({
-    noFaceCount: 0,
-    multipleFaceCount: 0,
-    cellPhoneCount: 0,
-    prohibitedObjectCount: 0,
-    tabSwitchCount: 0,
+    totalViolations: 0,
     examId: '',
     username: userInfo?.name || '',
     email: userInfo?.email || '',
+    screenshots: [],
   });
 
   useEffect(() => {
@@ -27,36 +24,29 @@ export const CheatingLogProvider = ({ children }) => {
   }, [userInfo]);
 
   const updateCheatingLog = (newLog) => {
+    console.log('[CheatingLogContext] 📝 updateCheatingLog called with:', newLog);
     setCheatingLog((prev) => {
-      // Ensure all count fields are numbers and have default values
+      console.log('[CheatingLogContext] 📊 Previous state:', prev);
       const updatedLog = {
         ...prev,
         ...newLog,
-        noFaceCount: Number(newLog.noFaceCount || prev.noFaceCount || 0),
-        multipleFaceCount: Number(newLog.multipleFaceCount || prev.multipleFaceCount || 0),
-        cellPhoneCount: Number(newLog.cellPhoneCount || prev.cellPhoneCount || 0),
-        prohibitedObjectCount: Number(
-          newLog.prohibitedObjectCount || prev.prohibitedObjectCount || 0,
-        ),
-        tabSwitchCount: Number(newLog.tabSwitchCount || prev.tabSwitchCount || 0),
+        totalViolations: Number(newLog.totalViolations !== undefined ? newLog.totalViolations : prev.totalViolations || 0),
+        screenshots: newLog.screenshots || prev.screenshots || [],
       };
-      console.log('Updated cheating log:', updatedLog); // Debug log
+      console.log('[CheatingLogContext] ✅ New state:', updatedLog);
       return updatedLog;
     });
   };
 
   const resetCheatingLog = (examId) => {
     const resetLog = {
-      noFaceCount: 0,
-      multipleFaceCount: 0,
-      cellPhoneCount: 0,
-      prohibitedObjectCount: 0,
-      tabSwitchCount: 0,
+      totalViolations: 0,
       examId: examId,
       username: userInfo?.name || '',
       email: userInfo?.email || '',
+      screenshots: [],
     };
-    console.log('Reset cheating log:', resetLog); // Debug log
+    console.log('[CheatingLogContext] 🔄 Reset cheating log:', resetLog);
     setCheatingLog(resetLog);
   };
 

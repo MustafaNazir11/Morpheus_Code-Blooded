@@ -161,18 +161,14 @@ export default function CheatingTable() {
                 <TableCell>Sno</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Email</TableCell>
-                <TableCell>No Face Count</TableCell>
-                <TableCell>Multiple Face Count</TableCell>
-                <TableCell>Cell Phone Count</TableCell>
-                <TableCell>Prohibited Object Count</TableCell>
-                <TableCell>Tab Switch Count</TableCell>
+                <TableCell>Total Violations</TableCell>
                 <TableCell>Screenshots</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredUsers.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={9} align="center">
+                  <TableCell colSpan={5} align="center">
                     No cheating logs found for this exam
                   </TableCell>
                 </TableRow>
@@ -184,41 +180,9 @@ export default function CheatingTable() {
                     <TableCell>{log.email}</TableCell>
                     <TableCell>
                       <Chip
-                        icon={getViolationIcon(log.noFaceCount)}
-                        label={log.noFaceCount}
-                        color={getViolationColor(log.noFaceCount)}
-                        size="small"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Chip
-                        icon={getViolationIcon(log.multipleFaceCount)}
-                        label={log.multipleFaceCount}
-                        color={getViolationColor(log.multipleFaceCount)}
-                        size="small"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Chip
-                        icon={getViolationIcon(log.cellPhoneCount)}
-                        label={log.cellPhoneCount}
-                        color={getViolationColor(log.cellPhoneCount)}
-                        size="small"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Chip
-                        icon={getViolationIcon(log.prohibitedObjectCount)}
-                        label={log.prohibitedObjectCount}
-                        color={getViolationColor(log.prohibitedObjectCount)}
-                        size="small"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Chip
-                        icon={getViolationIcon(log.tabSwitchCount || 0)}
-                        label={log.tabSwitchCount || 0}
-                        color={getViolationColor(log.tabSwitchCount || 0)}
+                        icon={getViolationIcon(log.totalViolations || 0)}
+                        label={log.totalViolations || 0}
+                        color={getViolationColor(log.totalViolations || 0)}
                         size="small"
                       />
                     </TableCell>
