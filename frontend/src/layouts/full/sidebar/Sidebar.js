@@ -57,7 +57,7 @@ const Sidebar = (props) => {
                 variant="h2"
                 sx={{
                   fontWeight: 800,
-                  fontSize: '1.8rem',
+                  fontSize: '2.0rem',
                   color: 'primary.main',
                   // ml: 10, // ❌ remove this as it pushes it too far right
                   // mt: 1,  // ❌ remove unnecessary top margin
@@ -103,7 +103,7 @@ const Sidebar = (props) => {
           alignItems: 'center',
           px: 2,
           py: 2,
-          width: '100%',
+          width: '120%',
         }}
       >
         <Logo />
@@ -111,7 +111,7 @@ const Sidebar = (props) => {
           variant="h6"
           sx={{
             fontWeight: 600,
-            fontSize: '1.2rem',
+            fontSize: '1.0rem',
             color: 'primary.main',
             ml: 1,
           }}

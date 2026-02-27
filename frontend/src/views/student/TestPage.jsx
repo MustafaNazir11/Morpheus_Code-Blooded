@@ -76,6 +76,154 @@ const TestPage = () => {
     };
   }, []);
 
+  // Browser lockdown: Disable right-click, copy, paste, cut, and keyboard shortcuts
+  useEffect(() => {
+    // Disable right-click
+    const handleContextMenu = (e) => {
+      e.preventDefault();
+      toast.warning('Right-click is disabled during the exam');
+      return false;
+    };
+
+    // Disable copy
+    const handleCopy = (e) => {
+      e.preventDefault();
+      toast.warning('Copy is disabled during the exam');
+      return false;
+    };
+
+    // Disable paste
+    const handlePaste = (e) => {
+      e.preventDefault();
+      toast.warning('Paste is disabled during the exam');
+      return false;
+    };
+
+    // Disable cut
+    const handleCut = (e) => {
+      e.preventDefault();
+      toast.warning('Cut is disabled during the exam');
+      return false;
+    };
+
+    // Disable keyboard shortcuts (Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+A, Ctrl+P, F12, etc.)
+    const handleKeyDown = (e) => {
+      // Disable F12 (DevTools)
+      if (e.key === 'F12') {
+        e.preventDefault();
+        toast.warning('Developer tools are disabled during the exam');
+        return false;
+      }
+
+      // Disable Ctrl+Shift+I (DevTools)
+      if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+        e.preventDefault();
+        toast.warning('Developer tools are disabled during the exam');
+        return false;
+      }
+
+      // Disable Ctrl+Shift+J (Console)
+      if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+        e.preventDefault();
+        toast.warning('Developer tools are disabled during the exam');
+        return false;
+      }
+
+      // Disable Ctrl+Shift+C (Inspect Element)
+      if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+        e.preventDefault();
+        toast.warning('Developer tools are disabled during the exam');
+        return false;
+      }
+
+      // Disable Ctrl+U (View Source)
+      if (e.ctrlKey && e.key === 'u') {
+        e.preventDefault();
+        toast.warning('View source is disabled during the exam');
+        return false;
+      }
+
+      // Disable Ctrl+C (Copy)
+      if (e.ctrlKey && e.key === 'c') {
+        e.preventDefault();
+        toast.warning('Copy is disabled during the exam');
+        return false;
+      }
+
+      // Disable Ctrl+V (Paste)
+      if (e.ctrlKey && e.key === 'v') {
+        e.preventDefault();
+        toast.warning('Paste is disabled during the exam');
+        return false;
+      }
+
+      // Disable Ctrl+X (Cut)
+      if (e.ctrlKey && e.key === 'x') {
+        e.preventDefault();
+        toast.warning('Cut is disabled during the exam');
+        return false;
+      }
+
+      // Disable Ctrl+A (Select All)
+      if (e.ctrlKey && e.key === 'a') {
+        e.preventDefault();
+        toast.warning('Select all is disabled during the exam');
+        return false;
+      }
+
+      // Disable Ctrl+P (Print)
+      if (e.ctrlKey && e.key === 'p') {
+        e.preventDefault();
+        toast.warning('Print is disabled during the exam');
+        return false;
+      }
+
+      // Disable Ctrl+S (Save)
+      if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        return false;
+      }
+    };
+
+    // Disable text selection
+    const handleSelectStart = (e) => {
+      // Allow selection in input fields and textareas
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        return true;
+      }
+      e.preventDefault();
+      return false;
+    };
+
+    // Add event listeners
+    document.addEventListener('contextmenu', handleContextMenu);
+    document.addEventListener('copy', handleCopy);
+    document.addEventListener('paste', handlePaste);
+    document.addEventListener('cut', handleCut);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('selectstart', handleSelectStart);
+
+    // Add CSS to disable text selection
+    document.body.style.userSelect = 'none';
+    document.body.style.webkitUserSelect = 'none';
+    document.body.style.msUserSelect = 'none';
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener('copy', handleCopy);
+      document.removeEventListener('paste', handlePaste);
+      document.removeEventListener('cut', handleCut);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('selectstart', handleSelectStart);
+      
+      // Restore text selection
+      document.body.style.userSelect = '';
+      document.body.style.webkitUserSelect = '';
+      document.body.style.msUserSelect = '';
+    };
+  }, []);
+
   useEffect(() => {
     if (userExamdata) {
       const exam = userExamdata.find((exam) => exam.examId === examId);

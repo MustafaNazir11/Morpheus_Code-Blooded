@@ -5,11 +5,8 @@ import Webcam from 'react-webcam';
 import { drawRect } from './utilities';
 import { Box, Card } from '@mui/material';
 import swal from 'sweetalert';
-import { UploadClient } from '@uploadcare/upload-client';
 import { FaceMesh } from '@mediapipe/face_mesh';
 import '@tensorflow/tfjs-backend-webgl';
-
-const client = new UploadClient({ publicKey: 'e69ab6e5db6d4a41760b' });
 
 export default function Home({ cheatingLog, updateCheatingLog }) {
   const webcamRef = useRef(null);
@@ -22,6 +19,66 @@ export default function Home({ cheatingLog, updateCheatingLog }) {
   const awayFramesRef = useRef(0);
   const cooldownRef = useRef(false);
   const warningShownRef = useRef(false);
+
+  // ================= CAPTURE & UPLOAD SCREENSHOT TO CLOUDINARY =================
+  const captureScreenshotAndUpload = async (type) => {
+    const video = webcamRef.current?.video;
+
+    if (!video || video.readyState !== 4 || !canvasRef.current) {
+      console.error('❌ Video or canvas not ready');
+      return null;
+    }
+
+    try {
+      // Capture screenshot from video
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      const dataUrl = canvas.toDataURL('image/jpeg');
+
+      // Upload to Cloudinary
+      console.log('📤 Uploading screenshot to Cloudinary...');
+      
+      const formData = new FormData();
+      formData.append('file', dataUrl);
+      formData.append('upload_preset', process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET);
+      formData.append('cloud_name', process.env.REACT_APP_CLOUDINARY_CLOUD_NAME);
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      
+      if (data.secure_url) {
+        console.log('✅ Uploaded to Cloudinary:', data.secure_url);
+
+        const screenshot = {
+          url: data.secure_url,
+          type: type,
+          detectedAt: new Date(),
+        };
+
+        // Update local screenshots state
+        setScreenshots((prev) => [...prev, screenshot]);
+
+        return screenshot;
+      } else {
+        console.error('❌ Cloudinary upload failed:', data);
+        return null;
+      }
+    } catch (error) {
+      console.error('❌ Upload failed:', error);
+      return null;
+    }
+  };
 
   // ================= FIX WASM CRASH =================
   useEffect(() => {
@@ -77,12 +134,26 @@ export default function Home({ cheatingLog, updateCheatingLog }) {
 
     setLastDetectionTime(prev => ({ ...prev, [type]: now }));
 
-    const newCount = (cheatingLog[`${type}Count`] || 0) + 1;
+    // Capture and upload screenshot
+    const screenshot = await captureScreenshotAndUpload(type);
 
-    updateCheatingLog({
-      ...cheatingLog,
-      [`${type}Count`]: newCount,
-    });
+    if (screenshot) {
+      // Update cheating log with new count and screenshot
+      const updatedLog = {
+        ...cheatingLog,
+        [`${type}Count`]: (cheatingLog[`${type}Count`] || 0) + 1,
+        screenshots: [...(cheatingLog.screenshots || []), screenshot],
+      };
+
+      updateCheatingLog(updatedLog);
+    } else {
+      // If screenshot upload failed, still update count
+      const newCount = (cheatingLog[`${type}Count`] || 0) + 1;
+      updateCheatingLog({
+        ...cheatingLog,
+        [`${type}Count`]: newCount,
+      });
+    }
 
     swal('Warning', `${type} detected`, 'warning');
   };

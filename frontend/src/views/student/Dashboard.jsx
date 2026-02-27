@@ -155,55 +155,59 @@ const Dashboard = () => {
                 Welcome back, {userInfo?.name}!
               </Typography>
               <Typography variant="body1" sx={{ color: '#64748b' }}>
-                Here's your learning progress overview
+                {userInfo?.role === 'teacher' 
+                  ? "Manage your exams and track student performance"
+                  : "Here's your learning progress overview"}
               </Typography>
             </Box>
           </Box>
         </Box>
 
-        {/* Charts Row */}
-        <Grid container spacing={3} sx={{ mb: 5 }}>
-          {/* Performance Chart */}
-          <Grid item xs={12}>
-            <Paper sx={{ p: 3, borderRadius: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
-              <Typography variant="h6" sx={{ fontWeight: 700, color: '#1e293b', mb: 3 }}>
-                Recent Performance
-              </Typography>
-              {performanceData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={250}>
-                  <BarChart data={performanceData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                    <XAxis dataKey="exam" tick={{ fill: '#64748b', fontSize: 12 }} />
-                    <YAxis 
-                      domain={[0, 100]} 
-                      tick={{ fill: '#64748b', fontSize: 12 }}
-                      label={{ value: 'Score (%)', angle: -90, position: 'insideLeft', style: { fill: '#64748b' } }}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: '#fff',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '8px',
-                      }}
-                      formatter={(value) => [`${value}%`, 'Score']}
-                    />
-                    <Bar dataKey="score" radius={[8, 8, 0, 0]}>
-                      {performanceData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={blueShades[index % blueShades.length]} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              ) : (
-                <Box sx={{ textAlign: 'center', py: 5 }}>
-                  <Typography variant="body2" sx={{ color: '#64748b' }}>
-                    No performance data yet. Take an exam to see your progress!
-                  </Typography>
-                </Box>
-              )}
-            </Paper>
+        {/* Charts Row - Only show for students */}
+        {userInfo?.role !== 'teacher' && (
+          <Grid container spacing={3} sx={{ mb: 5 }}>
+            {/* Performance Chart */}
+            <Grid item xs={12}>
+              <Paper sx={{ p: 3, borderRadius: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: '#1e293b', mb: 3 }}>
+                  Recent Performance
+                </Typography>
+                {performanceData.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={250}>
+                    <BarChart data={performanceData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                      <XAxis dataKey="exam" tick={{ fill: '#64748b', fontSize: 12 }} />
+                      <YAxis 
+                        domain={[0, 100]} 
+                        tick={{ fill: '#64748b', fontSize: 12 }}
+                        label={{ value: 'Score (%)', angle: -90, position: 'insideLeft', style: { fill: '#64748b' } }}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: '#fff',
+                          border: '1px solid #e2e8f0',
+                          borderRadius: '8px',
+                        }}
+                        formatter={(value) => [`${value}%`, 'Score']}
+                      />
+                      <Bar dataKey="score" radius={[8, 8, 0, 0]}>
+                        {performanceData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={blueShades[index % blueShades.length]} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <Box sx={{ textAlign: 'center', py: 5 }}>
+                    <Typography variant="body2" sx={{ color: '#64748b' }}>
+                      No performance data yet. Take an exam to see your progress!
+                    </Typography>
+                  </Box>
+                )}
+              </Paper>
+            </Grid>
           </Grid>
-        </Grid>
+        )}
 
         {/* Active Exams Section */}
         <Box>

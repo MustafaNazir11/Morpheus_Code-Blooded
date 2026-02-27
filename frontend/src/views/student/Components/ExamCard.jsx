@@ -6,6 +6,8 @@ import { toast } from 'react-toastify';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import QuizIcon from '@mui/icons-material/Quiz';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useDeleteExamMutation } from 'src/slices/examApiSlice';
 
 // Import background images
 import bg1 from '../../../assets/images/backgrounds/6.png'; // Blue
@@ -26,6 +28,7 @@ export default function ExamCard({ exam, isCompleted = false }) {
   const isTeacher = userInfo?.role === 'teacher';
   const [actualQuestionCount, setActualQuestionCount] = React.useState(totalQuestions);
   const [completionPercentage] = React.useState(Math.floor(Math.random() * 30) + 70); // Mock data
+  const [deleteExam, { isLoading: isDeleting }] = useDeleteExamMutation();
 
   const navigate = useNavigate();
 
@@ -47,7 +50,7 @@ export default function ExamCard({ exam, isCompleted = false }) {
 
   const handleCardClick = () => {
     if (isTeacher) {
-      toast.error('You are a teacher, you cannot take this exam');
+      // Teachers shouldn't navigate on card click
       return;
     }
     if (isCompleted) {
@@ -55,6 +58,23 @@ export default function ExamCard({ exam, isCompleted = false }) {
       return;
     }
     navigate(`/exam/${examId}`);
+  };
+
+  const handleDeleteExam = async (e) => {
+    e.stopPropagation();
+    
+    if (!window.confirm(`Are you sure you want to delete "${examName}"?`)) {
+      return;
+    }
+
+    try {
+      await deleteExam(examId).unwrap();
+      toast.success('Exam deleted successfully');
+      // Refresh the page to update the exam list
+      window.location.reload();
+    } catch (error) {
+      toast.error(error?.data?.message || 'Failed to delete exam');
+    }
   };
 
   // Select background image and difficulty based on exam
@@ -70,14 +90,14 @@ export default function ExamCard({ exam, isCompleted = false }) {
         overflow: 'hidden',
         boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-        cursor: 'pointer',
+        cursor: isTeacher ? 'default' : 'pointer',
         height: '100%',
         minHeight: '420px',
         display: 'flex',
         flexDirection: 'column',
         '&:hover': {
-          transform: 'translateY(-8px)',
-          boxShadow: '0 16px 32px rgba(0,0,0,0.18)',
+          transform: isTeacher ? 'none' : 'translateY(-8px)',
+          boxShadow: isTeacher ? '0 4px 12px rgba(0,0,0,0.1)' : '0 16px 32px rgba(0,0,0,0.18)',
         },
       }}
       onClick={handleCardClick}
@@ -178,7 +198,32 @@ export default function ExamCard({ exam, isCompleted = false }) {
 
         {/* Status Section */}
         <Box sx={{ mt: 'auto' }}>
-          {isCompleted ? (
+          {isTeacher ? (
+            <Button
+              fullWidth={false}
+              startIcon={<DeleteIcon />}
+              disabled={isDeleting}
+              sx={{
+                color: '#ef4444',
+                textTransform: 'none',
+                fontWeight: 600,
+                fontSize: '15px',
+                p: 0,
+                justifyContent: 'flex-start',
+                minWidth: 'auto',
+                '&:hover': {
+                  backgroundColor: 'transparent',
+                  color: '#dc2626',
+                },
+                '&:disabled': {
+                  color: '#94a3b8',
+                },
+              }}
+              onClick={handleDeleteExam}
+            >
+              {isDeleting ? 'Deleting...' : 'Delete Exam'}
+            </Button>
+          ) : isCompleted ? (
             <Button
               size="small"
               sx={{

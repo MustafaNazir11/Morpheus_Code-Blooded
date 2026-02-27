@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Grid, Box, Card, Stack, Typography } from '@mui/material';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 import PageContainer from 'src/components/container/PageContainer';
 import Logo from 'src/layouts/full/shared/logo/Logo';
@@ -99,32 +100,51 @@ const Login = () => {
             alignItems="center"
           >
             <Card elevation={9} sx={{ p: 4, zIndex: 1, width: '100%', maxWidth: '500px' }}>
-              <Box display="flex" alignItems="center" justifyContent="center">
-                <Typography
-                  variant="h4" // Choose a suitable variant (h1, h2, h3, h4, h5, h6, subtitle1, subtitle2, body1, body2, etc.)
-                  component="h1" // This will render an <h1> element
-                  style={{
-                    fontWeight: 'bold',
-                    color: '#1976d2', // Primary color or any color you prefer
-                    margin: '20px 0',
-                    textAlign: 'center',
-                    textShadow: '1px 1px 2px rgba(0, 0, 0, 0.3)', // Optional shadow effect
+              <Box display="flex" alignItems="center" justifyContent="center" mb={2}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1.5,
                   }}
                 >
-                  AI_Evalu8
-                </Typography>
+                  <Box
+                    sx={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: '50%',
+                      backgroundColor: '#3b82f6',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <RemoveRedEyeIcon sx={{ color: 'white', fontSize: 28 }} />
+                  </Box>
+                  <Typography
+                    variant="h3"
+                    component="h1"
+                    sx={{
+                      fontWeight: 700,
+                      color: '#3b82f6',
+                      letterSpacing: '-0.5px',
+                    }}
+                  >
+                    ProctAI
+                  </Typography>
+                </Box>
               </Box>
               <AuthLogin
                 formik={formik}
                 subtext={
                   <Typography variant="subtitle1" textAlign="center" color="textSecondary" mb={1}>
-                    CONDUCT SECURE ONLINE EXAMS NOW
+                    Conduct Secure Online Exams Now
                   </Typography>
                 }
                 subtitle={
                   <Stack direction="row" spacing={1} justifyContent="center" mt={3}>
                     <Typography color="textSecondary" variant="h6" fontWeight="500">
-                      New to Modernize?
+                      New to ProctAI?
                     </Typography>
                     <Typography
                       component={Link}

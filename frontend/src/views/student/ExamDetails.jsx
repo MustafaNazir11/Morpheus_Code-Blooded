@@ -98,7 +98,6 @@ const DescriptionAndInstructions = () => {
           {' '}We recommend you to read all instructions carefully before starting the test.
         </Typography>
 
-        <Typography mt={2}>#Exam #Assessment #Test</Typography>
 
         <>
           <Typography variant="h3" mb={3} mt={3}>
