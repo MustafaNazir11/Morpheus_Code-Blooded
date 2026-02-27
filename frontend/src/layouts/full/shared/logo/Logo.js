@@ -1,19 +1,32 @@
 import { Link } from 'react-router-dom';
-import { ReactComponent as LogoDark } from 'src/assets/images/logos/dark-logo.svg';
-import { styled, Typography } from '@mui/material';
+import { styled, Typography, Box } from '@mui/material';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 const LinkStyled = styled(Link)(() => ({
-  height: '70px',
-  width: '200px',
-  overflow: 'hidden',
-  display: 'block',
-  marginRight: '30px',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '12px',
+  textDecoration: 'none',
+  marginRight: '20px',
 }));
 
 const Logo = () => {
   return (
     <LinkStyled to="/">
-      <LogoDark height={70} />
+      <Box sx={{ 
+        width: '40px', 
+        height: '40px', 
+        borderRadius: '50%', 
+        bgcolor: '#3b82f6',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <RemoveRedEyeIcon sx={{ color: 'white', fontSize: '24px' }} />
+      </Box>
+      <Typography variant="h5" sx={{ fontWeight: 700, color: '#3b82f6', letterSpacing: '-0.5px' }}>
+        ProctAI
+      </Typography>
     </LinkStyled>
   );
 };

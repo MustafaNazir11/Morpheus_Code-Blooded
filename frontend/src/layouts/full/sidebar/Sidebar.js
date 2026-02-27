@@ -65,7 +65,6 @@ const Sidebar = (props) => {
                   mr: 5,
                 }}
               >
-                ProctAI
               </Typography>
             </Box>
 
