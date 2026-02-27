@@ -24,6 +24,7 @@ app.use(
   cors({
     origin: [
       "https://ai-proctored-system.vercel.app",
+      "https://your-vercel-url.vercel.app", // Replace with your actual Vercel URL
       "http://localhost:3000",
       "http://localhost:5000",
     ],
