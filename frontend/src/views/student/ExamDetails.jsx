@@ -43,7 +43,7 @@ const DescriptionAndInstructions = () => {
   // Reset cheating log when starting a new exam
   React.useEffect(() => {
     resetCheatingLog(examId);
-  }, [examId, resetCheatingLog]);
+  }, [examId]);
   const { data: questions, isLoading } = useGetQuestionsQuery(examId);
   const [hasCodingQuestions, setHasCodingQuestions] = useState(false);
   const [examData, setExamData] = useState(null);

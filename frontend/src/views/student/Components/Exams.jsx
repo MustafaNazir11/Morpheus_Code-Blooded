@@ -4,14 +4,11 @@ import PageContainer from 'src/components/container/PageContainer';
 import BlankCard from '../../../components/shared/BlankCard';
 import ExamCard from './ExamCard';
 import { useGetExamsQuery, useGetUserResultsQuery } from 'src/slices/examApiSlice';
-import { useSelector } from 'react-redux';
 
 const Exams = () => {
   // Fetch exam data from the backend using useGetExamsQuery
   const { data: userExams, isLoading, isError } = useGetExamsQuery();
   const { data: userResults } = useGetUserResultsQuery();
-  const { userInfo } = useSelector((state) => state.auth);
-  const isTeacher = userInfo?.role === 'teacher';
   
   console.log('Exam USer ', userExams);
 
@@ -52,8 +49,8 @@ const Exams = () => {
         </Box>
       )}
 
-      {/* Previously Given Exams Section - Only for students */}
-      {!isTeacher && completedExams.length > 0 && (
+      {/* Previously Given Exams Section */}
+      {completedExams.length > 0 && (
         <Box>
           <Typography variant="h5" mb={2}>
             Previously Given Exams

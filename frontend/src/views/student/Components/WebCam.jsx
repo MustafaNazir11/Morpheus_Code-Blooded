@@ -6,209 +6,260 @@ import { drawRect } from './utilities';
 import { Box, Card } from '@mui/material';
 import swal from 'sweetalert';
 import { UploadClient } from '@uploadcare/upload-client';
+import { FaceMesh } from '@mediapipe/face_mesh';
+import '@tensorflow/tfjs-backend-webgl';
 
 const client = new UploadClient({ publicKey: 'e69ab6e5db6d4a41760b' });
 
 export default function Home({ cheatingLog, updateCheatingLog }) {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
+  const faceMeshRef = useRef(null);
+  const isProcessingRef = useRef(false);
+  const smoothPoseRef = useRef({ yaw: 1, pitch: 1 });
   const [lastDetectionTime, setLastDetectionTime] = useState({});
   const [screenshots, setScreenshots] = useState([]);
+  const awayFramesRef = useRef(0);
+  const cooldownRef = useRef(false);
+  const warningShownRef = useRef(false);
 
-  // Initialize screenshots array when component mounts
+  // ================= FIX WASM CRASH =================
   useEffect(() => {
-    if (cheatingLog && cheatingLog.screenshots) {
+    window.onerror = function (message) {
+      if (message && message.includes('abort')) {
+        console.warn('MediaPipe WASM crash prevented');
+        return true;
+      }
+    };
+
+    return () => {
+      window.onerror = null;
+    };
+  }, []);
+
+  // ================= INIT SCREENSHOTS =================
+  useEffect(() => {
+    if (cheatingLog?.screenshots) {
       setScreenshots(cheatingLog.screenshots);
     }
   }, [cheatingLog]);
 
-  const captureScreenshotAndUpload = async (type) => {
-    const video = webcamRef.current?.video;
+  // ================= INIT FACEMESH =================
+  useEffect(() => {
+    const faceMesh = new FaceMesh({
+      locateFile: (file) =>
+        `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`,
+    });
 
-    if (
-      !video ||
-      video.readyState !== 4 || // ensure video is ready
-      video.videoWidth === 0 ||
-      video.videoHeight === 0
-    ) {
-      console.warn('Video not ready for screenshot');
-      return null;
-    }
+    faceMesh.setOptions({
+      maxNumFaces: 2,
+      refineLandmarks: true,
+      minDetectionConfidence: 0.5,
+      minTrackingConfidence: 0.5,
+    });
 
-    const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    faceMesh.onResults(onResults);
+    faceMeshRef.current = faceMesh;
 
-    const context = canvas.getContext('2d');
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    console.log('✅ FaceMesh initialized');
 
-    const dataUrl = canvas.toDataURL('image/jpeg');
-    const file = dataURLtoFile(dataUrl, `cheating_${Date.now()}.jpg`);
+    return () => {
+      faceMesh.close(); // important cleanup
+    };
+  }, []);
 
-    try {
-      const result = await client.uploadFile(file);
-      console.log('✅ Uploaded to Uploadcare:', result.cdnUrl);
-      
-      const screenshot = {
-        url: result.cdnUrl,
-        type: type,
-        detectedAt: new Date()
-      };
-
-      // Update local screenshots state
-      setScreenshots(prev => [...prev, screenshot]);
-      
-      return screenshot;
-    } catch (error) {
-      console.error('❌ Upload failed:', error);
-      return null;
-    }
-  };
-
+  // ================= HANDLE DETECTION =================
   const handleDetection = async (type) => {
     const now = Date.now();
     const lastTime = lastDetectionTime[type] || 0;
 
-    if (now - lastTime >= 3000) {
-      setLastDetectionTime((prev) => ({ ...prev, [type]: now }));
+    if (now - lastTime < 3000) return;
 
-      // Capture and upload screenshot (optional - may fail if Uploadcare is unavailable)
-      const screenshot = await captureScreenshotAndUpload(type);
-      
-      // Calculate new count
-      const newCount = (cheatingLog[`${type}Count`] || 0) + 1;
-      
-      // Update cheating log with new count and screenshot (if available)
-      const updatedLog = {
-        ...cheatingLog,
-        [`${type}Count`]: newCount,
-        screenshots: screenshot 
-          ? [...(cheatingLog.screenshots || []), screenshot]
-          : (cheatingLog.screenshots || [])
-      };
+    setLastDetectionTime(prev => ({ ...prev, [type]: now }));
 
-      console.log('Updating cheating log with:', updatedLog);
-      
-      // Check total violations BEFORE updating
-      const totalViolations = 
-        (type === 'noFace' ? newCount : (cheatingLog.noFaceCount || 0)) +
-        (type === 'multipleFace' ? newCount : (cheatingLog.multipleFaceCount || 0)) +
-        (type === 'cellPhone' ? newCount : (cheatingLog.cellPhoneCount || 0)) +
-        (type === 'prohibitedObject' ? newCount : (cheatingLog.prohibitedObjectCount || 0)) +
-        (cheatingLog.tabSwitchCount || 0);
-      
-      console.log(`Total violations after ${type}: ${totalViolations}`);
-      
-      updateCheatingLog(updatedLog);
-      
-      // Check if limit exceeded
-      if (totalViolations >= 5) {
-        swal({
-          title: 'Test Terminated!',
-          text: 'You have exceeded the maximum number of violations (5). Please contact your teacher.',
-          icon: 'error',
-          button: 'OK',
-          closeOnClickOutside: false,
-        }).then(() => {
-          window.location.href = '/dashboard';
-        });
+    const newCount = (cheatingLog[`${type}Count`] || 0) + 1;
+
+    updateCheatingLog({
+      ...cheatingLog,
+      [`${type}Count`]: newCount,
+    });
+
+    swal('Warning', `${type} detected`, 'warning');
+  };
+
+  const getHeadPose = (landmarks) => {
+    const nose = landmarks[1];
+    const left = landmarks[234];
+    const right = landmarks[454];
+    const top = landmarks[10];
+    const bottom = landmarks[152];
+
+    const distLeft = Math.abs(nose.x - left.x);
+    const distRight = Math.abs(right.x - nose.x);
+    const yawRatio = distLeft / distRight;
+
+    const distTop = Math.abs(nose.y - top.y);
+    const distBottom = Math.abs(bottom.y - nose.y);
+    const pitchRatio = distTop / distBottom;
+
+    // ===== SMOOTHING =====
+    const alpha = 0.85; // higher = smoother
+
+    smoothPoseRef.current.yaw =
+      alpha * smoothPoseRef.current.yaw + (1 - alpha) * yawRatio;
+
+    smoothPoseRef.current.pitch =
+      alpha * smoothPoseRef.current.pitch + (1 - alpha) * pitchRatio;
+
+    return {
+      yaw: smoothPoseRef.current.yaw,
+      pitch: smoothPoseRef.current.pitch,
+    };
+  };
+
+
+  // ================= FACEMESH RESULTS =================
+  const onResults = (results) => {
+    if (cooldownRef.current) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // ===== NO FACE =====
+    if (!results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0) {
+      handleDetection('noFace');
+      return;
+    }
+
+    // ===== MULTIPLE FACE =====
+    if (results.multiFaceLandmarks.length > 1) {
+      handleDetection('multipleFace');
+      return;
+    }
+
+    const landmarks = results.multiFaceLandmarks[0];
+
+    const { yaw, pitch } = getHeadPose(landmarks);
+    console.log("Yaw:", yaw.toFixed(2), "Pitch:", pitch.toFixed(2));
+
+    console.log("Yaw:", yaw.toFixed(2), "Pitch:", pitch.toFixed(2));
+
+    // ===== SAFE ZONE =====
+    const isLookingAway =
+      yaw < 0.6 || yaw > 1.4 ||
+      pitch < 0.6 || pitch > 1.6;
+
+    if (isLookingAway) {
+      awayFramesRef.current++;
+    } else {
+      // ✅ RESET when user returns to normal
+      awayFramesRef.current = 0;
+      warningShownRef.current = false;
+    }
+
+    // trigger warning after continuous frames
+    if (awayFramesRef.current > 5 && !warningShownRef.current) {
+      warningShownRef.current = true;
+      handleDetection('lookingAway');
+      awayFramesRef.current = 0;
+    }
+
+    // ===== ONLY TRIGGER AFTER 5 CONTINUOUS FRAMES =====
+    if (awayFramesRef.current > 8) {
+
+      if (!warningShownRef.current) {
+        swal('Warning', 'Please look at the screen', 'warning');
+        warningShownRef.current = true;
+
+        // 🔥 START COOLDOWN
+        cooldownRef.current = true;
+        setTimeout(() => {
+          cooldownRef.current = false;
+        }, 5000); // 5 sec cooldown
+
+        awayFramesRef.current = 0;
         return;
       }
 
-      switch (type) {
-        case 'noFace':
-          swal('Face Not Visible', 'Warning Recorded', 'warning');
-          break;
-        case 'multipleFace':
-          swal('Multiple Faces Detected', 'Warning Recorded', 'warning');
-          break;
-        case 'cellPhone':
-          swal('Cell Phone Detected', 'Warning Recorded', 'warning');
-          break;
-        case 'prohibitedObject':
-          swal('Prohibited Object Detected', 'Warning Recorded', 'warning');
-          break;
-        default:
-          break;
-      }
+      handleDetection('lookingAway');
+
+      // 🔥 START COOLDOWN
+      cooldownRef.current = true;
+      setTimeout(() => {
+        cooldownRef.current = false;
+      }, 5000);
+
+      awayFramesRef.current = 0;
+      warningShownRef.current = false;
     }
   };
-
-  const runCoco = async () => {
-    try {
-      const net = await cocossd.load();
-      console.log('AI model loaded.');
-      setInterval(() => detect(net), 1000);
-    } catch (error) {
-      console.error('Error loading model:', error);
-      swal('Error', 'Failed to load AI model. Please refresh the page.', 'error');
-    }
-  };
-
+  // ================= DETECT =================
   const detect = async (net) => {
-    if (webcamRef.current && webcamRef.current.video && webcamRef.current.video.readyState === 4) {
-      const video = webcamRef.current.video;
-      const videoWidth = video.videoWidth;
-      const videoHeight = video.videoHeight;
+    const video = webcamRef.current?.video;
+    if (!video || video.readyState !== 4) return;
 
-      webcamRef.current.video.width = videoWidth;
-      webcamRef.current.video.height = videoHeight;
-      canvasRef.current.width = videoWidth;
-      canvasRef.current.height = videoHeight;
+    const canvas = canvasRef.current;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // 🔥 SAFE FACEMESH CALL
+    if (faceMeshRef.current && !isProcessingRef.current) {
+      isProcessingRef.current = true;
 
       try {
-        const obj = await net.detect(video);
-        const ctx = canvasRef.current.getContext('2d');
-        ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-        drawRect(obj, ctx);
-
-        let person_count = 0;
-        let faceDetected = false;
-
-        obj.forEach((element) => {
-          const detectedClass = element.class;
-          console.log('Detected:', detectedClass);
-
-          if (detectedClass === 'cell phone') handleDetection('cellPhone');
-          if (detectedClass === 'book' || detectedClass === 'laptop')
-            handleDetection('prohibitedObject');
-          if (detectedClass === 'person') {
-            faceDetected = true;
-            person_count++;
-            if (person_count > 1) handleDetection('multipleFace');
-          }
-        });
-
-        if (!faceDetected) handleDetection('noFace');
-      } catch (error) {
-        console.error('Error during detection:', error);
+        await faceMeshRef.current.send({ image: video });
+      } catch (err) {
+        console.error('FaceMesh error:', err);
       }
+
+      isProcessingRef.current = false;
     }
+
+    // ================= COCO =================
+    const obj = await net.detect(video);
+    const ctx = canvas.getContext('2d');
+    drawRect(obj, ctx);
+
+    obj.forEach(el => {
+      if (el.class === 'cell phone') handleDetection('cellPhone');
+      if (el.class === 'book' || el.class === 'laptop') {
+        handleDetection('prohibitedObject');
+      }
+    });
   };
 
+  // ================= LOAD MODEL =================
+  const runCoco = async () => {
+    await tf.setBackend('webgl');
+    await tf.ready();
+
+    const net = await cocossd.load();
+    console.log('✅ COCO loaded');
+
+    const id = setInterval(() => detect(net), 500);
+    return id;
+  };
+
+  // ================= INIT =================
   useEffect(() => {
-    runCoco();
+    let id;
+    runCoco().then(interval => (id = interval));
+
+    return () => {
+      if (id) clearInterval(id);
+    };
   }, []);
 
   return (
     <Box>
-      <Card variant="outlined" sx={{ position: 'relative', width: '100%', height: '100%' }}>
+      <Card sx={{ position: 'relative' }}>
         <Webcam
           ref={webcamRef}
           audio={false}
           muted
-          screenshotFormat="image/jpeg"
-          videoConstraints={{
-            width: 640,
-            height: 480,
-            facingMode: 'user',
-          }}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-          }}
+          videoConstraints={{ width: 640, height: 480, facingMode: 'user' }}
+          style={{ width: '100%' }}
         />
+
         <canvas
           ref={canvasRef}
           style={{
@@ -223,15 +274,4 @@ export default function Home({ cheatingLog, updateCheatingLog }) {
       </Card>
     </Box>
   );
-}
-
-// Helper to convert base64 to File
-function dataURLtoFile(dataUrl, fileName) {
-  const arr = dataUrl.split(',');
-  const mime = arr[0].match(/:(.*?);/)[1];
-  const bstr = atob(arr[1]);
-  let n = bstr.length;
-  const u8arr = new Uint8Array(n);
-  while (n--) u8arr[n] = bstr.charCodeAt(n);
-  return new File([u8arr], fileName, { type: mime });
 }

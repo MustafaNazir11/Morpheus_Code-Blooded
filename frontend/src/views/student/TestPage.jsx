@@ -29,6 +29,24 @@ const TestPage = () => {
   const { data, isLoading } = useGetQuestionsQuery(examId);
   const [score, setScore] = useState(0);
 
+  // Initialize cheating log with exam and user info
+  useEffect(() => {
+    if (examId && userInfo) {
+      console.log('[TestPage] 🎯 Initializing cheating log with:', {
+        examId,
+        username: userInfo.name,
+        email: userInfo.email,
+      });
+      updateCheatingLog({
+        examId,
+        username: userInfo.name,
+        email: userInfo.email,
+        totalViolations: cheatingLog.totalViolations || 0,
+        screenshots: cheatingLog.screenshots || [],
+      });
+    }
+  }, [examId, userInfo]);
+
   // Enter fullscreen when test starts
   useEffect(() => {
     const enterFullscreen = async () => {
@@ -73,12 +91,7 @@ const TestPage = () => {
   // Tab switching detection
   useEffect(() => {
     // Check total violations
-    const totalViolations = 
-      cheatingLog.noFaceCount + 
-      cheatingLog.multipleFaceCount + 
-      cheatingLog.cellPhoneCount + 
-      cheatingLog.prohibitedObjectCount + 
-      cheatingLog.tabSwitchCount;
+    const totalViolations = cheatingLog.totalViolations || 0;
 
     if (totalViolations >= 5) {
       swal({
@@ -101,10 +114,10 @@ const TestPage = () => {
           setLastTabSwitchTime(now);
           
           // Tab switched away
-          const newCount = cheatingLog.tabSwitchCount + 1;
+          const newCount = (cheatingLog.totalViolations || 0) + 1;
           updateCheatingLog({
             ...cheatingLog,
-            tabSwitchCount: newCount,
+            totalViolations: newCount,
           });
           
           // Show popup alert
@@ -120,10 +133,10 @@ const TestPage = () => {
       if (now - lastTabSwitchTime >= 2000) {
         setLastTabSwitchTime(now);
         
-        const newCount = cheatingLog.tabSwitchCount + 1;
+        const newCount = (cheatingLog.totalViolations || 0) + 1;
         updateCheatingLog({
-          ...cheatingLog,
-          tabSwitchCount: newCount,
+            ...cheatingLog,
+          totalViolations: newCount,
         });
         
         swal('Window Focus Lost!', `Warning Recorded (Count: ${newCount})`, 'warning');
@@ -138,10 +151,10 @@ const TestPage = () => {
         if (now - lastTabSwitchTime >= 2000) {
           setLastTabSwitchTime(now);
           
-          const newCount = cheatingLog.tabSwitchCount + 1;
+          const newCount = (cheatingLog.totalViolations || 0) + 1;
           updateCheatingLog({
             ...cheatingLog,
-            tabSwitchCount: newCount,
+            totalViolations: newCount,
           });
           
           swal('Fullscreen Exited!', `Warning Recorded (Count: ${newCount})`, 'warning');
@@ -171,8 +184,7 @@ const TestPage = () => {
 
   const handleMcqCompletion = () => {
     setIsMcqCompleted(true);
-    // Reset cheating log for coding exam
-    resetCheatingLog(examId);
+    // Don't reset cheating log - we want to keep violations from MCQ section
     navigate(`/exam/${examId}/codedetails`);
   };
 
@@ -188,18 +200,15 @@ const TestPage = () => {
         username: userInfo.name,
         email: userInfo.email,
         examId: examId,
-        noFaceCount: parseInt(cheatingLog.noFaceCount) || 0,
-        multipleFaceCount: parseInt(cheatingLog.multipleFaceCount) || 0,
-        cellPhoneCount: parseInt(cheatingLog.cellPhoneCount) || 0,
-        prohibitedObjectCount: parseInt(cheatingLog.prohibitedObjectCount) || 0,
-        tabSwitchCount: parseInt(cheatingLog.tabSwitchCount) || 0,
+        totalViolations: parseInt(cheatingLog.totalViolations) || 0,
+        screenshots: cheatingLog.screenshots || [],
       };
 
-      console.log('[TestPage] Submitting cheating log:', updatedLog);
+      console.log('[TestPage] 📤 Submitting cheating log:', updatedLog);
 
       // Save the cheating log
       const result = await saveCheatingLogMutation(updatedLog).unwrap();
-      console.log('[TestPage] Cheating log saved successfully:', result);
+      console.log('[TestPage] ✅ Cheating log saved successfully:', result);
 
       toast.success('Test submitted successfully!');
       navigate('/Success');
