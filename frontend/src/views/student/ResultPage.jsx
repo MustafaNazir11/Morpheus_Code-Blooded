@@ -540,10 +540,10 @@ const ResultPage = () => {
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  Total Submissions
+                  Total Attempts
                 </Typography>
                 <Typography variant="h3">
-                  {results.reduce((acc, curr) => acc + (curr.codingSubmissions?.length || 0), 0)}
+                  {results.length}
                 </Typography>
               </CardContent>
             </Card>
@@ -839,13 +839,10 @@ const ResultPage = () => {
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
-                Total Submissions
+                Total Results
               </Typography>
               <Typography variant="h3">
-                {filteredResults.reduce(
-                  (acc, curr) => acc + (curr.codingSubmissions?.length || 0),
-                  0,
-                )}
+                {filteredResults.length}
               </Typography>
             </CardContent>
           </Card>

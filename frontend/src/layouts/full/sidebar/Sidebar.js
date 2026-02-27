@@ -56,8 +56,8 @@ const Sidebar = (props) => {
               <Typography
                 variant="h2"
                 sx={{
-                  fontWeight: 600,
-                  fontSize: '1.2rem',
+                  fontWeight: 800,
+                  fontSize: '1.8rem',
                   color: 'primary.main',
                   // ml: 10, // ❌ remove this as it pushes it too far right
                   // mt: 1,  // ❌ remove unnecessary top margin
@@ -65,7 +65,7 @@ const Sidebar = (props) => {
                   mr: 5,
                 }}
               >
-                AI_EVAL_8
+                ProctAI
               </Typography>
             </Box>
 
