@@ -1,16 +1,16 @@
 import React from 'react';
-import { Typography } from '@mui/material';
-import PageContainer from 'src/components/container/PageContainer';
-import DashboardCard from '../../components/shared/DashboardCard';
+import { Helmet } from 'react-helmet';
 import Exams from './Components/Exams';
 
 const ExamPage = () => {
   return (
-    <PageContainer title="Exam Page" description="Active Exams">
-      <DashboardCard title="All Active Exams">
-        <Exams />
-      </DashboardCard>
-    </PageContainer>
+    <>
+      <Helmet>
+        <title>Exam Page</title>
+        <meta name="description" content="Active Exams" />
+      </Helmet>
+      <Exams />
+    </>
   );
 };
 

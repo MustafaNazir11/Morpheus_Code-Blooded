@@ -18,6 +18,7 @@ const Success = Loadable(lazy(() => import('../views/Success')));
 // const Shadow = Loadable(lazy(() => import('../views/utilities/Shadow')));
 //Student Routes
 
+const Dashboard = Loadable(lazy(() => import('./../views/student/Dashboard')));
 const TestPage = Loadable(lazy(() => import('./../views/student/TestPage')));
 const ExamPage = Loadable(lazy(() => import('./../views/student/ExamPage')));
 const ExamDetails = Loadable(lazy(() => import('./../views/student/ExamDetails')));
@@ -48,7 +49,7 @@ const Router = createBrowserRouter(
         {/* // Main layout */}
         <Route path="/" element={<FullLayout />}>
           <Route index={true} path="/" element={<Navigate to="/dashboard" />} />
-          <Route path="/dashboard" exact={true} element={<ExamPage />} />
+          <Route path="/dashboard" exact={true} element={<Dashboard />} />
           <Route path="/sample-page" exact={true} element={<SamplePage />} />
           <Route path="/Success" exact={true} element={<Success />} />
           <Route path="/exam" exact={true} element={<ExamPage />} />
