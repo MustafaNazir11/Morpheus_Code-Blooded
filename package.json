@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mediapipe/face_detection": "^0.4.1646425229",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -22,6 +23,7 @@
     "groq-sdk": "^0.37.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.0",
+    "nodemailer": "^8.0.1",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.3.0",
     "uuid": "^9.0.0"
