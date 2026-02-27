@@ -29,6 +29,17 @@ const examSchema = mongoose.Schema(
       default: uuidv4, // Generate a new UUID for each document
       unique: true, // Ensure uniqueness of UUIDs
     },
+    // Exam access control
+    allowedDepartments: {
+      type: [String],
+      enum: ['Computer Science', 'Information Technology', 'Electronics', 'Mechanical', 'Civil', 'All'],
+      default: ['All'],
+    },
+    allowedClasses: {
+      type: [String],
+      enum: ['First Year', 'Second Year', 'Third Year', 'Fourth Year', 'Graduate', 'All'],
+      default: ['All'],
+    },
   },
   {
     timestamps: true,

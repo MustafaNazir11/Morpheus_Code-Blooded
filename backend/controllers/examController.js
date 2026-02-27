@@ -1,19 +1,36 @@
 import asyncHandler from "express-async-handler";
 import Exam from "./../models/examModel.js";
 
-// @desc Get all exams
+// @desc Get all exams (filtered by student's department and class)
 // @route GET /api/exams
 // @access Public
 const getExams = asyncHandler(async (req, res) => {
   const exams = await Exam.find();
-  res.status(200).json(exams);
+  
+  // If user is logged in and is a student, filter exams
+  if (req.user && req.user.role === 'student') {
+    const studentDept = req.user.department;
+    const studentClass = req.user.class;
+    
+    const filteredExams = exams.filter(exam => {
+      const deptMatch = exam.allowedDepartments.includes('All') || exam.allowedDepartments.includes(studentDept);
+      const classMatch = exam.allowedClasses.includes('All') || exam.allowedClasses.includes(studentClass);
+      return deptMatch && classMatch;
+    });
+    
+    console.log(`Filtered ${filteredExams.length} exams for student (${studentDept}, ${studentClass})`);
+    res.status(200).json(filteredExams);
+  } else {
+    // Teachers see all exams
+    res.status(200).json(exams);
+  }
 });
 
 // @desc Create a new exam
 // @route POST /api/exams
 // @access Private (admin)
 const createExam = asyncHandler(async (req, res) => {
-  const { examName, totalQuestions, duration, liveDate, deadDate } = req.body;
+  const { examName, totalQuestions, duration, liveDate, deadDate, allowedDepartments, allowedClasses } = req.body;
 
   const exam = new Exam({
     examName,
@@ -21,6 +38,8 @@ const createExam = asyncHandler(async (req, res) => {
     duration,
     liveDate,
     deadDate,
+    allowedDepartments: allowedDepartments || ['All'],
+    allowedClasses: allowedClasses || ['All'],
   });
 
   const createdExam = await exam.save();

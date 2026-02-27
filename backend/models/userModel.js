@@ -21,6 +21,25 @@ const userSchema = mongoose.Schema(
       type: String,
       require: true,
     },
+    // Student profile fields
+    department: {
+      type: String,
+      enum: ['Computer Science', 'Information Technology', 'Electronics', 'Mechanical', 'Civil'],
+      default: 'Computer Science',
+    },
+    class: {
+      type: String,
+      enum: ['First Year', 'Second Year', 'Third Year', 'Fourth Year', 'Graduate'],
+      default: 'First Year',
+    },
+    rollNo: {
+      type: String,
+      default: '',
+    },
+    college: {
+      type: String,
+      default: '',
+    },
   },
   {
     timestamps: true,

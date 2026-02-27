@@ -4,6 +4,8 @@ import Question from "../models/quesModel.js";
 import CodingQuestion from "../models/codingQuestionModel.js";
 import SubjectiveResponse from "../models/subjectiveResponseModel.js";
 import { gradeSubjectiveAnswer } from "../utils/groqGrader.js";
+import { sendResultEmail } from "../utils/emailService.js";
+import Exam from "../models/examModel.js";
 
 // @desc    Save exam result
 // @route   POST /api/results
@@ -12,6 +14,7 @@ const saveResult = asyncHandler(async (req, res) => {
   const { examId, answers, subjectiveAnswers } = req.body;
 
   console.log('=== SAVE RESULT REQUEST ===');
+  console.log('🔥 EMAIL FEATURE LOADED - Server restarted successfully! 🔥');
   console.log('ExamId:', examId);
   console.log('MCQ Answers:', answers);
   console.log('Subjective Answers:', subjectiveAnswers);
@@ -135,6 +138,37 @@ const saveResult = asyncHandler(async (req, res) => {
   });
 
   console.log('Result saved:', result._id);
+  
+  // Send email with results to the student
+  try {
+    // Get exam details for email (examId is UUID, not ObjectId)
+    const exam = await Exam.findOne({ examId });
+    
+    const resultData = {
+      totalScore,
+      percentage,
+      mcqScore,
+      subjectiveScore,
+      maxPossible,
+    };
+
+    const emailResult = await sendResultEmail(
+      req.user.email,
+      req.user.name,
+      { title: exam?.examName || 'Exam' },
+      resultData
+    );
+
+    if (emailResult.success) {
+      console.log('✅ Result email sent successfully to:', req.user.email);
+    } else {
+      console.error('❌ Failed to send result email:', emailResult.error);
+    }
+  } catch (emailError) {
+    console.error('❌ Error sending result email:', emailError);
+    // Don't fail the request if email fails
+  }
+
   console.log('=== END SAVE RESULT ===');
 
   res.status(201).json({

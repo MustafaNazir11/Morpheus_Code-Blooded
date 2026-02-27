@@ -14,6 +14,10 @@ const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      department: user.department,
+      class: user.class,
+      rollNo: user.rollNo,
+      college: user.college,
       password_encrypted: user.password,
       message: "User Successfully login with role: " + user.role,
     });
@@ -48,6 +52,10 @@ const registerUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      department: user.department,
+      class: user.class,
+      rollNo: user.rollNo,
+      college: user.college,
       password_encrypted: user.password,
       message: "User Successfully created with role: " + user.role,
     });
@@ -73,6 +81,10 @@ const getUserProfile = asyncHandler(async (req, res) => {
     name: req.user.name,
     email: req.user.email,
     role: req.user.role,
+    department: req.user.department,
+    class: req.user.class,
+    rollNo: req.user.rollNo,
+    college: req.user.college,
   };
   res.status(200).json(user);
 });
@@ -84,6 +96,12 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
     user.role = req.body.role || user.role;
+    
+    // Update student profile fields
+    if (req.body.department) user.department = req.body.department;
+    if (req.body.class) user.class = req.body.class;
+    if (req.body.rollNo !== undefined) user.rollNo = req.body.rollNo;
+    if (req.body.college !== undefined) user.college = req.body.college;
 
     if (req.body.password) {
       user.password = req.body.password;
@@ -95,6 +113,10 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       role: updatedUser.role,
+      department: updatedUser.department,
+      class: updatedUser.class,
+      rollNo: updatedUser.rollNo,
+      college: updatedUser.college,
     });
   } else {
     res.status(404);
