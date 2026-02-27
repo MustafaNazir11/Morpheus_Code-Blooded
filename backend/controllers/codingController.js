@@ -158,7 +158,7 @@ const getCodingQuestionsByExamId = asyncHandler(async (req, res) => {
       data: question,
     });
   } catch (error) {
-    console.error("Error fetching coding question:", error);
+    console.error(" fetching coding question:", error);
     res.status(500).json({
       success: false,
       message: error.message,
