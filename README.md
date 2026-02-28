@@ -172,6 +172,7 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 ### Student Performance Analytics Dashboard
 
 ![Cheat Log Dashboard](readme-images/result-analytics1.jpeg)
+
 ![Cheat Log Dashboard](readme-images/result-analytics2.jpeg)
 
 More features and improvements are in development and will be included in future updates.
@@ -198,6 +199,7 @@ Password: 123456
 
 Email: teacher@test.com
 Password: 123456
+
 
 
 
