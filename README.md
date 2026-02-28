@@ -188,44 +188,6 @@ ProctAI-MERN is an AI-powered Automated Exam Proctoring System (AEPS) designed t
 
 ---
 
-# 🖥 How to Run
-
-### 1️⃣ Clone Repository
-```bash
-git clone https://github.com/your-username/ProctAI-MERN.git
-cd ProctAI-MERN
-```
-
-### 2️⃣ Install Dependencies
-
-Backend:
-```bash
-cd backend
-npm install
-```
-
-Frontend:
-```bash
-cd frontend
-npm install
-```
-
-### 3️⃣ Start Backend
-```bash
-cd backend
-npm start
-```
-
-### 4️⃣ Start Frontend
-```bash
-cd frontend
-npm start
-```
-
-Frontend runs at:
-http://localhost:3000
-
----
 
 # 🌍 Deployed Website
 
@@ -236,8 +198,8 @@ https://proctaii.vercel.app/
 # 🔐 Test Users
 
 ### 👨‍🎓 Student Account
-Email: raghavmulay0@gmail.com  
-Password: 123456789  
+Email: student_testing@gmail.com  
+Password: 123456  
 
 ### 👨‍🏫 Teacher Account
 Email: teacher@test.com  
@@ -245,6 +207,5 @@ Password: 123456
 
 ---
 
-# 📜 License
 
-This project is licensed under the MIT License.
+
