@@ -110,7 +110,7 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 - #### Student
 
-![Student Dashboard](readme-images/student-dashboard.png)
+![Student Dashboard](readme-images/student-dashboard.jpeg)
 
 - #### Teacher
 
@@ -124,7 +124,7 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 - #### Create Questions
 
-![Create Questions](readme-images/create-question.png)
+![Create Questions](readme-images/create-question.jpeg)
 
 
 ### Cheating Detection During Exam
@@ -159,7 +159,7 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 ### Cheat Log Dashboard
 
-![Cheat Log Dashboard](readme-images/cheat-log.png)
+![Cheat Log Dashboard](readme-images/cheating-log.png)
 
 ### Student Performance Analytics Dashboard
 
@@ -190,6 +190,7 @@ Password: 123456
 
 Email: teacher@test.com
 Password: 123456
+
 
 
 
