@@ -1,225 +1,250 @@
 # ProctAI-MERN
 
-ProctAI-MERN is an Automated Exam Proctoring System (AEPS) developed with cutting-edge AI-based algorithms for online exams. This comprehensive system is designed to ensure the integrity and security of online examinations. The project leverages technologies such as React.js, Redux, Node.js, and TensorFlow.js to offer a feature-rich exam proctoring solution.
+ProctAI-MERN is an AI-powered Automated Exam Proctoring System (AEPS) designed to ensure integrity and security in online examinations. Built using the MERN stack along with TensorFlow.js, the system provides real-time AI monitoring, automated grading, and performance analytics.
 
-![ProctoAI-MERN](readme-images/sytem-arch.png)
+---
 
-## Table of Contents
+## 🏗 System Architecture
+
+<p align="center">
+  <img src="readme-images/sytem-arch.png" width="700"/>
+</p>
+
+---
+
+## 📚 Table of Contents
 
 - [Tech Stack](#tech-stack)
-
-  - [Backend](#backend)
-  - [Frontend](#frontend)
-
 - [Current Functionality](#current-functionality)
-  - [User Authentication and Role Management](#user-authentication-and-role-management)
-  - [Teacher Capabilities](#teacher-capabilities)
-  - [Student Functionality](#student-functionality)
-  - [AI Exam Proctoring](#ai-exam-proctoring)
 - [Future Scope](#future-scope)
-  - [Candidate Verification](#candidate-verification)
-  - [Voice Recognition](#voice-recognition)
-  - [Secure Exam Environment](#secure-exam-environment)
-  - [Unified Portal](#unified-portal)
 - [Project Screenshots](#project-screenshots)
-  - [Login Page](#login-page)
-  - [Teacher Dashboard](#teacher-dashboard)
-  - [Exam Page](#exam-page)
-  - [Cheat Log Dashboard](#cheat-log-dashboard)
 - [How to Run](#how-to-run)
-- [Contributors](#contributors)
+- [Deployed Website](#deployed-website)
+- [Test Users](#test-users)
 - [License](#license)
 
-## Tech Stack
+---
+
+# 🛠 Tech Stack
+
+## Backend
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JSON Web Tokens (JWT)
+- bcryptjs
+- Express-Async-Handler
+- Cloudinary (for cheating screenshot storage)
+
+## Frontend
+- React.js
+- Redux Toolkit
+- TensorFlow.js
+- Material UI
+- React Router
+- React Toastify
+- React Webcam
+- Formik + Yup
+- SweetAlert
+
+---
+
+# 🚀 Current Functionality
+
+## 🔐 User Authentication & Role Management
+- Role-based login for Students and Teachers
+- Secure JWT-based authentication
+- Password hashing using bcrypt
+
+## 👨‍🏫 Teacher Capabilities
+- Create and manage exams
+- Add and configure questions
+- View cheating logs
+- Access student performance analytics
+
+## 👨‍🎓 Student Functionality
+- View and attempt available exams
+- Real-time timer with auto-submit
+- View results and analytics after submission
+
+## 🤖 AI Exam Proctoring
+- Mobile phone detection
+- Multiple face detection
+- Face not visible detection
+- Tab switch detection
+- Automatic logging of suspicious activity
+
+## 📊 Result & Performance Analysis
+- Automatic objective grading
+- AI-based subjective grading (NLP powered)
+- Instant result generation
+- Student analytics dashboard
+- Email notification after submission
+
+---
+
+# 🔮 Future Scope
+
+## Candidate Verification
+- Real-time face verification with registered student
+
+## Voice Recognition
+- Voice anomaly detection during exams
 
-ProctoAI-MERN utilizes a range of technologies to provide its comprehensive functionality. The key technologies and dependencies used in this project include:
+## Unified Portal
+- Integrated exam + chat + document upload system
+
+---
+
+# 📸 Project Screenshots
 
-### Backend
+## 🔐 Login Page
+<p align="center">
+  <img src="readme-images/login-page-student.png" width="600"/>
+</p>
+
+## 📊 Dashboard
+
+### Student Dashboard
+<p align="center">
+  <img src="readme-images/student-dashboard.jpeg" width="600"/>
+</p>
+
+### Teacher Dashboard
+<p align="center">
+  <img src="readme-images/teacher-dashboard.png" width="600"/>
+</p>
+
+---
+
+## 📝 Exam Creation
+
+### Create Exam
+<p align="center">
+  <img src="readme-images/create-exam.png" width="600"/>
+</p>
+
+### Create Questions
+<p align="center">
+  <img src="readme-images/create-question.jpeg" width="600"/>
+</p>
 
-- **Node.js:** A JavaScript runtime for server-side development.
-- **Express:** A minimal and flexible Node.js web application framework.
-- **MongoDB:** A NoSQL database for storing user data.
-- **Mongoose:** An elegant MongoDB object modeling tool.
-- **JSON Web Tokens (JWT):** Used for secure authentication and authorization.
-- **bcryptjs:** A library for securely hashing passwords.
-- **Express-Async-Handler:** Middleware to handle exceptions in asynchronous route handlers.
-- **Cloudinary:** An open source platform to store screenshots of cheating students.
+### All Student Results
+<p align="center">
+  <img src="readme-images/result-page.jpeg" width="600"/>
+</p>
 
-### Frontend
+### Student Marks Analysis
+<p align="center">
+  <img src="readme-images/student-analysis.jpeg" width="600"/>
+</p>
 
-- **React:** A JavaScript library for building user interfaces.
-- **Redux Toolkit:** A library for state management in React applications.
-- **TensorFlow.js:** An open-source machine learning framework for web-based applications.
-- **Material-UI:** A popular React UI framework.
-- **React-Router:** A routing library for React applications.
-- **React-Toastify:** Used for displaying notifications.
-- **React-Webcam:** A React component for capturing video from the user's webcam.
-- **Yup:** A JavaScript schema builder for value parsing and validation.
-- **Formik:** A library for building forms in React with form validation.
-- **SweetAlert:** A JavaScript library for creating beautiful and responsive alert messages.
+---
 
-## Current Functionality
+## 🚨 Cheating Detection During Exam
 
-### User Authentication and Role Management
+### Cell Phone Detection
+<p align="center">
+  <img src="readme-images/cell-phone-detection.png" width="500"/>
+</p>
 
-- Students and teachers can log in with separate roles and permissions.
-- Secure authentication and authorization for user accounts.
+### Face Not Visible Detection
+<p align="center">
+  <img src="readme-images/face-not-visible.jpeg" width="500"/>
+</p>
 
-### Teacher Capabilities
+### Multiple Face Detection
+<p align="center">
+  <img src="readme-images/multiple-face-detection.png" width="500"/>
+</p>
 
-- Teachers can create exams and define questions.
-- Exam management for teachers, including question creation and configuration.
+### Tab Switch Detection
+<p align="center">
+  <img src="readme-images/tabswitch-detection.png" width="500"/>
+</p>
 
-### Student Functionality
+---
 
-- Students can view available exams and participate in them.
-- The test page displays questions and a timer with an auto-submit feature.
+## 🧠 AI Grading (NLP)
+<p align="center">
+  <img src="readme-images/nlp.jpeg" width="600"/>
+</p>
 
-### AI Exam Proctoring
+---
 
-- Real-time AI proctoring of students during exams.
-- AI checks for cheating behaviors, such as mobile phone detection, multiple faces detection, and absence of detected faces.
-- Cheating incidents are logged and viewable by teachers in their dashboard.
+## 📧 Email Notification After Submission
+<p align="center">
+  <img src="readme-images/email.jpeg" width="600"/>
+</p>
 
-### Result & Performance Analysis
+---
 
-- Automatic evaluation of objective questions.
-- Instant result generation after exam submission.
-- Students can view their scores and performance analysis.
-- Teachers can access detailed performance reports for each student.
+## 📈 Student Performance Analytics
+<p align="center">
+  <img src="readme-images/result-analytics1.jpeg" width="45%"/>
+  <img src="readme-images/result-analytics2.jpeg" width="45%"/>
+</p>
 
-## Future Scope
+---
 
-### Candidate Verification
+# 🖥 How to Run
 
-- Real-time candidate identity verification through image capture and matching with registered candidates.
+### 1️⃣ Clone Repository
+```bash
+git clone https://github.com/your-username/ProctAI-MERN.git
+cd ProctAI-MERN
+```
 
-### Voice Recognition
+### 2️⃣ Install Dependencies
 
-- Utilization of voice recognition technology to monitor and identify voice anomalies during online exams, identifying potential malpractice.
+Backend:
+```bash
+cd backend
+npm install
+```
 
-### Unified Portal
+Frontend:
+```bash
+cd frontend
+npm install
+```
 
-- Creation of a unified portal for users to log in, access question papers, open a chat window for communication with the examiner, and upload answer sheets via an integrated scanner within the portal.
+### 3️⃣ Start Backend
+```bash
+cd backend
+npm start
+```
 
-## Project Screenshots
+### 4️⃣ Start Frontend
+```bash
+cd frontend
+npm start
+```
 
-### Login Page
+Frontend runs at:
+http://localhost:3000
 
-- #### Student
+---
 
-![Login Page](readme-images/login-page-student.png)
+# 🌍 Deployed Website
 
-### Dashboard
+https://proctaii.vercel.app/
 
-- #### Student
+---
 
-![Student Dashboard](readme-images/student-dashboard.jpeg)
+# 🔐 Test Users
 
-- #### Teacher
+### 👨‍🎓 Student Account
+Email: raghavmulay0@gmail.com  
+Password: 123456789  
 
-![Teacher Dashboard](readme-images/teacher-dashboard.png)
+### 👨‍🏫 Teacher Account
+Email: teacher@test.com  
+Password: 123456  
 
-### Creating Exam Feature
+---
 
-- #### Create Exam
+# 📜 License
 
-![Create Exam](readme-images/create-exam.png)
-
-- #### Create Questions
-
-![Create Questions](readme-images/create-question.jpeg)
-
-- #### All Student Result 
-
-![Create Questions](readme-images/result-page.jpeg)
-
-- #### All Student Marks Analysis
-
-![Create Questions](readme-images/student-analysis.jpeg)
-
-
-### Cheating Detection During Exam
-
-- Webcam capture is hidden due to privacy reasons, with a black box covering the video feed.
-
-#### Cell Phone Detection
-
-![Cell Phone Detection](readme-images/cell-phone-detection.png)
-
-#### Face Not Visible Detection
-
-![Cell Phone Detection](readme-images/face-not-visible.jpeg)
-
-#### Multiple Face Visible Detection
-
-![Cell Phone Detection](readme-images/multiple-face-detection.png)
-
-#### Tab Switch Detection
-
-![Cell Phone Detection](readme-images/tabswitch-detection.png)
-
-### Test Page
-
-#### Start
-
-![Test Start](readme-images/start-exam.png)
-
-### Cheat Log Dashboard
-
-![Cheat Log Dashboard](readme-images/cheating-log.png)
-
-### Automatic AI Grading for Subjective Questions
-
-![Cheat Log Dashboard](readme-images/nlp.jpeg)
-
-### Email Recieved After Exam Submission 
-
-![Cheat Log Dashboard](readme-images/email.jpeg)
-
-### Student Performance Analytics Dashboard
-
-![Cheat Log Dashboard](readme-images/result-analytics1.jpeg)
-
-![Cheat Log Dashboard](readme-images/result-analytics2.jpeg)
-
-More features and improvements are in development and will be included in future updates.
-
-## How to Run
-
-To run this project locally, follow these steps:
-
-1. Clone this repository.
-2. Install the required dependencies in both the frontend and backend folders.
-3. Start the server using `npm start` in the backend folder.
-4. Start the React app using `npm start` in the frontend folder.  look at this code
-
-   
-## Deployed Website Testing: https://proctaii.vercel.app/
-
-## Test Users
-
-You can use the following demo accounts to test different roles in the system:
-
-👨‍🎓 Student Account
-
-Email: raghavmulay0@gmail.com
-Password: 123456789
-
-👨‍🎓 Teacher Account
-
-Email: teacher@test.com
-Password: 123456
-
-
-
-
-
-
-
-
-
-
-
-
-
+This project is licensed under the MIT License.
