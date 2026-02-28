@@ -137,11 +137,11 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 #### Student Looking Away Detection
 
-![Prohibited Object Detection](head-turn-detection/.jpg)
+![Prohibited Object Detection](head-turn-detection.png)
 
 #### Face Not Visible Detection
 
-![Cell Phone Detection](readme-images/face-not-visible.png)
+![Cell Phone Detection](readme-images/face-not-visible.jpeg)
 
 #### Multiple Face Visible Detection
 
@@ -163,8 +163,8 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 ### Student Performance Analytics Dashboard
 
-![Cheat Log Dashboard](readme-images/result-analytics2.png)
-![Cheat Log Dashboard](readme-images/result-analytics2.png)
+![Cheat Log Dashboard](readme-images/result-analytics2.jpeg)
+![Cheat Log Dashboard](readme-images/result-analytics2.jpeg)
 
 More features and improvements are in development and will be included in future updates.
 
@@ -175,6 +175,21 @@ To run this project locally, follow these steps:
 1. Clone this repository.
 2. Install the required dependencies in both the frontend and backend folders.
 3. Start the server using `npm start` in the backend folder.
-4. Start the React app using `npm start` in the frontend folder.  look at this code 
+4. Start the React app using `npm start` in the frontend folder.  look at this code
+
+## Test Users
+
+You can use the following demo accounts to test different roles in the system:
+
+👨‍🎓 Student Account
+
+Email: student@test.com
+Password: 123456
+
+👨‍🎓 Teacher Account
+
+Email: teacher@test.com
+Password: 123456
+
 
 
