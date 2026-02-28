@@ -135,13 +135,13 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 ![Cell Phone Detection](readme-images/cell-phone-detection.png)
 
-#### Prohibited Object Detection
+#### Student Looking Away Detection
 
-![Prohibited Object Detection](readme-images/.jpg)
+![Prohibited Object Detection](head-turn-detection/.jpg)
 
 #### Face Not Visible Detection
 
-![Cell Phone Detection](readme-images/head-turn-detection.png)
+![Cell Phone Detection](readme-images/face-not-visible.png)
 
 #### Multiple Face Visible Detection
 
@@ -157,13 +157,14 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 ![Test Start](readme-images/test-start.jpg)
 
-#### Submitted
-
-![Test Submitted](readme-images/test-submitted.jpg)
-
 ### Cheat Log Dashboard
 
-![Cheat Log Dashboard](readme-images/cheat-log-dashboard.png)
+![Cheat Log Dashboard](readme-images/cheat-log.png)
+
+### Student Performance Analytics Dashboard
+
+![Cheat Log Dashboard](readme-images/result-analytics2.png)
+![Cheat Log Dashboard](readme-images/result-analytics2.png)
 
 More features and improvements are in development and will be included in future updates.
 
@@ -175,4 +176,5 @@ To run this project locally, follow these steps:
 2. Install the required dependencies in both the frontend and backend folders.
 3. Start the server using `npm start` in the backend folder.
 4. Start the React app using `npm start` in the frontend folder.  look at this code 
+
 
