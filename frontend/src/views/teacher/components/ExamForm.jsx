@@ -3,7 +3,6 @@ import {
   Box,
   Typography,
   Button,
-  TextField,
   FormControl,
   InputLabel,
   Select,
@@ -18,7 +17,7 @@ const DEPARTMENTS = ['Computer Science', 'Information Technology', 'Electronics'
 const CLASSES = ['First Year', 'Second Year', 'Third Year', 'Fourth Year', 'Graduate', 'All'];
 
 const CreateExam = ({ formik, title, subtitle, subtext }) => {
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } = formik;
+  const { values, errors, touched, handleChange, handleSubmit, setFieldValue } = formik;
 
   return (
     <>
