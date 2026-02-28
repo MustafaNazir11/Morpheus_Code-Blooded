@@ -43,6 +43,7 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 - **JSON Web Tokens (JWT):** Used for secure authentication and authorization.
 - **bcryptjs:** A library for securely hashing passwords.
 - **Express-Async-Handler:** Middleware to handle exceptions in asynchronous route handlers.
+- **Cloudinary:** An open source platform to store screenshots of cheating students.
 
 ### Frontend
 
@@ -80,6 +81,13 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 - AI checks for cheating behaviors, such as mobile phone detection, multiple faces detection, and absence of detected faces.
 - Cheating incidents are logged and viewable by teachers in their dashboard.
 
+### Result & Performance Analysis
+
+- Automatic evaluation of objective questions.
+- Instant result generation after exam submission.
+- Students can view their scores and performance analysis.
+- Teachers can access detailed performance reports for each student.
+
 ## Future Scope
 
 ### Candidate Verification
@@ -89,10 +97,6 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 ### Voice Recognition
 
 - Utilization of voice recognition technology to monitor and identify voice anomalies during online exams, identifying potential malpractice.
-
-### Secure Exam Environment
-
-- Preventing candidates from opening or accessing unauthorized applications on their desktop or mobile devices during the online exam.
 
 ### Unified Portal
 
@@ -142,10 +146,6 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 #### Cell Phone Detection
 
 ![Cell Phone Detection](readme-images/cell-phone-detection.png)
-
-#### Student Looking Away Detection
-
-![Prohibited Object Detection](head-turn-detection.png)
 
 #### Face Not Visible Detection
 
@@ -198,6 +198,7 @@ Password: 123456
 
 Email: teacher@test.com
 Password: 123456
+
 
 
 
