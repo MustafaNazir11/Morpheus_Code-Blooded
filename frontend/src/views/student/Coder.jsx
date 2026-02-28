@@ -253,13 +253,13 @@ export default function Coder() {
           console.log('[Coder] Saved log ID:', logResult._id);
 
           toast.success('Test submitted successfully!');
-          navigate('/success');
+          navigate('/Success');
         } catch (cheatingLogError) {
           console.error('[Coder] ✗ Error saving cheating log:', cheatingLogError);
           console.error('[Coder] Error data:', cheatingLogError.data);
           console.error('[Coder] Error status:', cheatingLogError.status);
           toast.error('Test submitted but failed to save monitoring logs');
-          navigate('/success');
+          navigate('/Success');
         }
       } else {
         console.error('Submission failed:', response.data);
