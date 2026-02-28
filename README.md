@@ -173,6 +173,10 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 ![Cheat Log Dashboard](readme-images/nlp.jpeg)
 
+### Email Recieved After Exam Submission 
+
+![Cheat Log Dashboard](readme-images/email.jpeg)
+
 ### Student Performance Analytics Dashboard
 
 ![Cheat Log Dashboard](readme-images/result-analytics1.jpeg)
@@ -196,13 +200,14 @@ You can use the following demo accounts to test different roles in the system:
 
 👨‍🎓 Student Account
 
-Email: student@test.com
-Password: 123456
+Email: raghavmulay0@gmail.com
+Password: 123456789
 
 👨‍🎓 Teacher Account
 
 Email: teacher@test.com
 Password: 123456
+
 
 
 
