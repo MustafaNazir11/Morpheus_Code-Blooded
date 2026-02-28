@@ -2,7 +2,7 @@
 
 ProctoAI-MERN is an Automated Exam Proctoring System (AEPS) developed with cutting-edge AI-based algorithms for online exams. This comprehensive system is designed to ensure the integrity and security of online examinations. The project leverages technologies such as React.js, Redux, Node.js, and TensorFlow.js to offer a feature-rich exam proctoring solution.
 
-![ProctoAI-MERN](readme-images/proctoai-mern.jpg)
+![ProctoAI-MERN](readme-images/system-arch.png)
 
 ## Table of Contents
 
@@ -126,6 +126,14 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 ![Create Questions](readme-images/create-question.jpeg)
 
+- #### All Student Result 
+
+![Create Questions](readme-images/result-page.jpeg)
+
+- #### All Student Marks Analysis
+
+![Create Questions](readme-images/student-analysis.jpeg)
+
 
 ### Cheating Detection During Exam
 
@@ -155,7 +163,7 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 #### Start
 
-![Test Start](readme-images/test-start.jpg)
+![Test Start](readme-images/start-exam.png)
 
 ### Cheat Log Dashboard
 
@@ -163,7 +171,7 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 ### Student Performance Analytics Dashboard
 
-![Cheat Log Dashboard](readme-images/result-analytics2.jpeg)
+![Cheat Log Dashboard](readme-images/result-analytics1.jpeg)
 ![Cheat Log Dashboard](readme-images/result-analytics2.jpeg)
 
 More features and improvements are in development and will be included in future updates.
@@ -190,6 +198,7 @@ Password: 123456
 
 Email: teacher@test.com
 Password: 123456
+
 
 
 
