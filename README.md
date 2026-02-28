@@ -14,14 +14,12 @@ ProctAI-MERN is an AI-powered Automated Exam Proctoring System (AEPS) designed t
 
 ## 📚 Table of Contents
 
-- [Tech Stack](#tech-stack)
-- [Current Functionality](#current-functionality)
-- [Future Scope](#future-scope)
-- [Project Screenshots](#project-screenshots)
-- [How to Run](#how-to-run)
-- [Deployed Website](#deployed-website)
-- [Test Users](#test-users)
-- [License](#license)
+- [Tech Stack](#-tech-stack)
+- [Current Functionality](#-current-functionality)
+- [Future Scope](#-future-scope)
+- [Project Screenshots](#-project-screenshots)
+- [Deployed Website](#-deployed-website)
+- [Test Users](#-test-users)
 
 ---
 
@@ -206,6 +204,7 @@ Email: teacher@test.com
 Password: 123456  
 
 ---
+
 
 
 
