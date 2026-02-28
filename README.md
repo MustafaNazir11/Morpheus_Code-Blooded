@@ -104,39 +104,28 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 - #### Student
 
-![Login Page](readme-images/login-page-student.jpg)
-
-- #### Teacher
-
-![Login Page](readme-images/login-page-teacher.jpg)
+![Login Page](readme-images/login-page-student.png)
 
 ### Dashboard
 
 - #### Student
 
-![Student Dashboard](readme-images/student-dashboard.jpg)
+![Student Dashboard](readme-images/student-dashboard.png)
 
 - #### Teacher
 
-![Teacher Dashboard](readme-images/teacher-dashboard.jpg)
+![Teacher Dashboard](readme-images/teacher-dashboard.png)
 
 ### Creating Exam Feature
 
 - #### Create Exam
 
-![Create Exam](readme-images/create-exam.jpg)
-
-- #### Success
-
-![Create Exam](readme-images/create-exam-success.jpg)
+![Create Exam](readme-images/create-exam.png)
 
 - #### Create Questions
 
-![Create Questions](readme-images/create-question.jpg)
+![Create Questions](readme-images/create-question.png)
 
-### Exam Page
-
-![Exam Page](readme-images/exam-page.png)
 
 ### Cheating Detection During Exam
 
@@ -148,11 +137,19 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 #### Prohibited Object Detection
 
-![Prohibited Object Detection](readme-images/prohibited-object-detection.jpg)
+![Prohibited Object Detection](readme-images/.jpg)
 
 #### Face Not Visible Detection
 
-![Cell Phone Detection](readme-images/face-not-visible-detection.jpg)
+![Cell Phone Detection](readme-images/head-turn-detection.png)
+
+#### Multiple Face Visible Detection
+
+![Cell Phone Detection](readme-images/multiple-face-detection.png)
+
+#### Tab Switch Detection
+
+![Cell Phone Detection](readme-images/tabswitch-detection.png)
 
 ### Test Page
 
@@ -178,3 +175,4 @@ To run this project locally, follow these steps:
 2. Install the required dependencies in both the frontend and backend folders.
 3. Start the server using `npm start` in the backend folder.
 4. Start the React app using `npm start` in the frontend folder.  look at this code 
+
