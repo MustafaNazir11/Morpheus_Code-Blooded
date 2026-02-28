@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled, Container, Box } from '@mui/material';
 import { Outlet, useLocation } from 'react-router-dom';
 
@@ -24,6 +24,10 @@ const ExamLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const location = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
   return (
