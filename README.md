@@ -31,7 +31,6 @@ ProctAI-MERN is an AI-powered Automated Exam Proctoring System (AEPS) designed t
 - MongoDB
 - Mongoose
 - JSON Web Tokens (JWT)
-- bcryptjs
 - Express-Async-Handler
 - Cloudinary (for cheating screenshot storage)
 
@@ -43,8 +42,6 @@ ProctAI-MERN is an AI-powered Automated Exam Proctoring System (AEPS) designed t
 - React Router
 - React Toastify
 - React Webcam
-- Formik + Yup
-- SweetAlert
 
 ---
 
@@ -204,6 +201,7 @@ Email: teacher@test.com
 Password: 123456  
 
 ---
+
 
 
 
