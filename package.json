@@ -16,7 +16,7 @@
     "@mediapipe/face_detection": "^0.4.1646425229",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
+    "cors": "^2.8.6",
     "dotenv": "^16.6.1",
     "express": "^4.18.2",
     "express-async-handler": "^1.2.0",

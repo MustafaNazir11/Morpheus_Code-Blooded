@@ -23,6 +23,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
+      "https://proctor-ai-morpheus.netlify.app",
       "https://ai-proctored-system.vercel.app",
       "https://proctaii.vercel.app",
       "http://localhost:3000",
