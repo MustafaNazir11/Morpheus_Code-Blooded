@@ -1,6 +1,6 @@
-# ProctAI-MERN
+# ProctAI
 
-ProctAI-MERN is an AI-powered Automated Exam Proctoring System (AEPS) designed to ensure integrity and security in online examinations. Built using the MERN stack along with TensorFlow.js, the system provides real-time AI monitoring, automated grading, and performance analytics.
+ProctAI is an AI-powered Automated Exam Proctoring System (AEPS) designed to ensure integrity and security in online examinations. Built using the MERN stack along with TensorFlow.js, the system provides real-time AI monitoring, automated grading, and performance analytics.
 
 ---
 
@@ -201,6 +201,7 @@ Email: teacher@test.com
 Password: 123456  
 
 ---
+
 
 
 
