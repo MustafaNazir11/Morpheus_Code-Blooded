@@ -2,7 +2,7 @@
 
 ProctoAI-MERN is an Automated Exam Proctoring System (AEPS) developed with cutting-edge AI-based algorithms for online exams. This comprehensive system is designed to ensure the integrity and security of online examinations. The project leverages technologies such as React.js, Redux, Node.js, and TensorFlow.js to offer a feature-rich exam proctoring solution.
 
-![ProctoAI-MERN](readme-images/proctoai-mern.jpg)
+![ProctoAI-MERN](readme-images/sytem-arch.png)
 
 ## Table of Contents
 
@@ -110,7 +110,7 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 - #### Student
 
-![Student Dashboard](readme-images/student-dashboard.png)
+![Student Dashboard](readme-images/student-dashboard.jpeg)
 
 - #### Teacher
 
@@ -124,7 +124,15 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 - #### Create Questions
 
-![Create Questions](readme-images/create-question.png)
+![Create Questions](readme-images/create-question.jpeg)
+
+- #### All Student Result 
+
+![Create Questions](readme-images/result-page.jpeg)
+
+- #### All Student Marks Analysis
+
+![Create Questions](readme-images/student-analysis.jpeg)
 
 
 ### Cheating Detection During Exam
@@ -135,13 +143,13 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 ![Cell Phone Detection](readme-images/cell-phone-detection.png)
 
-#### Prohibited Object Detection
+#### Student Looking Away Detection
 
-![Prohibited Object Detection](readme-images/.jpg)
+![Prohibited Object Detection](head-turn-detection.png)
 
 #### Face Not Visible Detection
 
-![Cell Phone Detection](readme-images/head-turn-detection.png)
+![Cell Phone Detection](readme-images/face-not-visible.jpeg)
 
 #### Multiple Face Visible Detection
 
@@ -155,15 +163,16 @@ ProctoAI-MERN utilizes a range of technologies to provide its comprehensive func
 
 #### Start
 
-![Test Start](readme-images/test-start.jpg)
-
-#### Submitted
-
-![Test Submitted](readme-images/test-submitted.jpg)
+![Test Start](readme-images/start-exam.png)
 
 ### Cheat Log Dashboard
 
-![Cheat Log Dashboard](readme-images/cheat-log-dashboard.png)
+![Cheat Log Dashboard](readme-images/cheating-log.png)
+
+### Student Performance Analytics Dashboard
+
+![Cheat Log Dashboard](readme-images/result-analytics1.jpeg)
+![Cheat Log Dashboard](readme-images/result-analytics2.jpeg)
 
 More features and improvements are in development and will be included in future updates.
 
@@ -174,5 +183,25 @@ To run this project locally, follow these steps:
 1. Clone this repository.
 2. Install the required dependencies in both the frontend and backend folders.
 3. Start the server using `npm start` in the backend folder.
-4. Start the React app using `npm start` in the frontend folder.  look at this code 
+4. Start the React app using `npm start` in the frontend folder.  look at this code
+
+## Test Users
+
+You can use the following demo accounts to test different roles in the system:
+
+👨‍🎓 Student Account
+
+Email: student@test.com
+Password: 123456
+
+👨‍🎓 Teacher Account
+
+Email: teacher@test.com
+Password: 123456
+
+
+
+
+
+
 
